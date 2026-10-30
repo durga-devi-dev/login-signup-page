@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { HashRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./login";
 import Signup from "./signup";
 import { Home } from "./assets/component/Home";
@@ -6,7 +6,7 @@ import "./App.css";
 
 function App() {
   return (
-    <Router basename="/login-signup-page">
+    <Router>
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
