@@ -13,7 +13,9 @@ const getStoredUsers = () => {
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState("success");
   const navigate = useNavigate();
 
   const handleLogin = (event) => {
@@ -21,6 +23,7 @@ function Login() {
 
     if (!email || !password) {
       setMessage("Please enter both email and password!");
+      setMessageType("error");
       return;
     }
 
@@ -45,40 +48,66 @@ function Login() {
         JSON.stringify({ name: activeUser.name, email: activeUser.email })
       );
       setMessage("Login Successful!");
+      setMessageType("success");
       setTimeout(() => navigate("/home"), 350);
     } else {
       setMessage("Invalid Email or Password!");
+      setMessageType("error");
     }
   };
 
   return (
-    <div className="login-container">
-      <form className="login-box" onSubmit={handleLogin}>
-        <h2>Login</h2>
+    <div className="auth-page">
+      <div className="auth-card">
+        <div className="auth-header">
+          <span className="eyebrow">Welcome back</span>
+          <h2>Login</h2>
+        </div>
 
-        <label>Email</label>
-        <input
-          type="email"
-          placeholder="Enter Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+        <form onSubmit={handleLogin} className="auth-form">
+          <div className="field-group">
+            <label htmlFor="login-email">Email</label>
+            <input
+              id="login-email"
+              type="email"
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
 
-        <label>Password</label>
-        <input
-          type="password"
-          placeholder="Enter Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+          <div className="field-group">
+            <label htmlFor="login-password">Password</label>
+            <div className="password-field">
+              <input
+                id="login-password"
+                type={showPassword ? "text" : "password"}
+                placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <button
+                type="button"
+                className="toggle-password"
+                onClick={() => setShowPassword((prev) => !prev)}
+                aria-label={showPassword ? "Hide password" : "Show password"}
+              >
+                {showPassword ? "Hide" : "Show"}
+              </button>
+            </div>
+          </div>
 
-        <button type="submit">Login</button>
+          <button type="submit" className="primary-button">
+            Login
+          </button>
 
-        <p>{message}</p>
-        <p className="register-text">
-          Don't have an account? <Link to="/signup">Signup</Link>
-        </p>
-      </form>
+          {message && <p className={`message ${messageType}`}>{message}</p>}
+
+          <p className="switch-text">
+            Don&apos;t have an account? <Link to="/signup">Signup</Link>
+          </p>
+        </form>
+      </div>
     </div>
   );
 }

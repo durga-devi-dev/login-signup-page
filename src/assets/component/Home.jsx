@@ -16,6 +16,12 @@ export const Home = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    const storedUser = getLoggedInUser();
+    if (!storedUser) {
+      navigate("/", { replace: true });
+      return;
+    }
+
     const fetchData = async () => {
       try {
         const response = await axios.get("https://jsonplaceholder.typicode.com/users/4");
@@ -27,20 +33,21 @@ export const Home = () => {
     };
 
     fetchData();
-  }, []);
+  }, [navigate]);
 
   const handleLogout = () => {
     localStorage.removeItem("loggedInUser");
-    navigate("/");
+    navigate("/", { replace: true });
   };
 
   return (
-    <div className="home-container">
+    <div className="home-page">
       <div className="home-card">
+        <span className="eyebrow">Dashboard</span>
         <h1>Welcome</h1>
         <h2>{data ? data.name : "Loading..."}</h2>
-        <p>Signed in as: {userName}</p>
-        <button type="button" onClick={handleLogout} className="logout-button">
+        <p className="user-info">Signed in as: {userName}</p>
+        <button type="button" onClick={handleLogout} className="secondary-button">
           Logout
         </button>
       </div>
